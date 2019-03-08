@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import { WebBrowser } from 'expo';
 
 export default class HomeScreen extends React.Component {
   render() {
