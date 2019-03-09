@@ -25,7 +25,7 @@ export default class AddScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      text: 'Deck Name'
+      text: 'Deck Title'
     }
   }
 
