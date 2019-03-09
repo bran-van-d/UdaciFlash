@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { setDummyData } from '../utils/_deck';
 
 export default class HomeScreen extends React.Component {
@@ -49,10 +49,16 @@ export default class HomeScreen extends React.Component {
 
             return (
               <View key={id} style={styles.deck}> 
-                <View style={styles.container}> 
+                <TouchableOpacity 
+                  style={styles.container} 
+                  onPress={() => this.props.navigation.navigate(
+                    'DeckDetail',
+                    { deckId: 1}
+                  )}
+                > 
                   <Text> {name} </Text>
                   <Text> {cards.length} cards </Text>
-                </View>
+                </TouchableOpacity>
               </View>
             )
           })}

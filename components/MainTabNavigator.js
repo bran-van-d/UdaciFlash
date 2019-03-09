@@ -5,9 +5,11 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 import TabBarIcon from './TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import AddScreen from '../screens/AddScreen';
+import DetailScreen from '../screens/DetailScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
+  DeckDetail: DetailScreen
 });
 
 HomeStack.navigationOptions = {
