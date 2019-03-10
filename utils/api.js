@@ -1,10 +1,5 @@
 import { AsyncStorage } from 'react-native'
-import { DECK_STORAGE_KEY, formatCalendarResults } from './_deck'
-
-export function fetchCalendarResults() {
-  return AsyncStorage.getItem(DECK_STORAGE_KEY)
-    .then(formatCalendarResults)
-}
+import { DECK_STORAGE_KEY } from './_deck'
 
 export function addDeck({ entry, key }) {
   return AsyncStorage.mergeItem(DECK_STORAGE_KEY, JSON.stringify({

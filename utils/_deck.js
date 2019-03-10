@@ -9,12 +9,12 @@ export function setDummyData() {
   const dummyData = [
     {
       id: getRandomNumber(555),
-      name: 'Deck 1',
+      name: 'TEST DECK 1',
       cards: []
     },
     {
       id: getRandomNumber(999),
-      name: 'Deck 2',
+      name: 'TEST DECK 2',
       cards: []
     },
   ]

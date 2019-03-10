@@ -1,43 +1,55 @@
 import React from 'react';
+import { AsyncStorage } from 'react-native'
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { setDummyData } from '../utils/_deck';
+import { DECK_STORAGE_KEY } from '../utils/_deck';
 
 export default class HomeScreen extends React.Component {
-  state = {
-    decks: [
-      {
-        id: 1,
-        name: 'Deck 1',
-        cards: [
-          {
-            id: 1,
-            question: '2 + 2 ',
-            answer: '4'
-          },
-          {
-            id: 2,
-            question: '2 x 10 ',
-            answer: '20'
-          }
-        ]
-      },
-      {
-        id: 2,
-        name: 'Deck 2',
-        cards: [
-          {
-            id: 1,
-            question: '10 - 2 ',
-            answer: '8'
-          },
-          {
-            id: 2,
-            question: '7 x 3 ',
-            answer: '21'
-          }
-        ]
-      },
-    ]
+  constructor(props) {
+    super(props);
+    this.state = {
+      decks: [
+        {
+          id: 1,
+          name: 'Deck 1',
+          cards: [
+            {
+              id: 1,
+              question: '2 + 2 ',
+              answer: '4'
+            },
+            {
+              id: 2,
+              question: '2 x 10 ',
+              answer: '20'
+            }
+          ]
+        },
+        {
+          id: 2,
+          name: 'Deck 2',
+          cards: [
+            {
+              id: 1,
+              question: '10 - 2 ',
+              answer: '8'
+            },
+            {
+              id: 2,
+              question: '7 x 3 ',
+              answer: '21'
+            }
+          ]
+        },
+      ],
+      testDeck: []
+    }
+  }
+
+  componentDidMount() {
+    AsyncStorage.getItem(DECK_STORAGE_KEY)
+      .then((results) => {
+        this.setState({ testDeck: JSON.parse(results)})
+      })
   }
 
   render() {
@@ -56,6 +68,28 @@ export default class HomeScreen extends React.Component {
                     { deckId: 1}
                   )}
                 > 
+                  <Text> {name} </Text>
+                  <Text> {cards.length} cards </Text>
+                </TouchableOpacity>
+              </View>
+            )
+          })}
+
+        </View>
+
+        <View style={styles.column}>
+          {this.state.testDeck.length > 0 && this.state.testDeck.map((deck) => {
+            const { id, name, cards } = deck;
+
+            return (
+              <View key={id} style={styles.deck}>
+                <TouchableOpacity
+                  style={styles.container}
+                  onPress={() => this.props.navigation.navigate(
+                    'DeckDetail',
+                    { deckId: 1 }
+                  )}
+                >
                   <Text> {name} </Text>
                   <Text> {cards.length} cards </Text>
                 </TouchableOpacity>
