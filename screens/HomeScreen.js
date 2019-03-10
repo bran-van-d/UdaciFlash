@@ -28,10 +28,12 @@ class HomeScreen extends React.Component {
       return <AppLoading />
     }
 
+    console.log(decks);
+
     return (
       <View style={styles.container}>
         <View style={styles.column}>
-          {Object.values(decks).map((deck) => {
+          {decks.length > 0 && decks.map((deck) => {
             const { id, name, cards } = deck;
 
             return (
@@ -40,7 +42,7 @@ class HomeScreen extends React.Component {
                   style={styles.container}
                   onPress={() => this.props.navigation.navigate(
                     'DeckDetail',
-                    { deckId: deck.id }
+                    { deckId: deck.id, deckName: deck.name }
                   )}
                 >
                   <Text> {name} </Text>
@@ -79,7 +81,7 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(decks) {
   return {
-    decks
+    decks: Object.values(decks)
   }
 }
 

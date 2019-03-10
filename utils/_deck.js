@@ -41,3 +41,7 @@ export async function setDummyData() {
 
   return dummyData
 }
+
+export async function setData() {
+  return AsyncStorage.getItem(DECK_STORAGE_KEY)
+}

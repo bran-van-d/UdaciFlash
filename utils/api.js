@@ -11,9 +11,9 @@ export function removeDeck(key) {
   return AsyncStorage.getItem(DECK_STORAGE_KEY)
     .then((results) => {
       const data = JSON.parse(results)
-      data[key] = undefined
-      delete data[key]
-      AsyncStorage.setItem(DECK_STORAGE_KEY, JSON.stringify(data))
+      data[key-1] = undefined
+      const updatedData = data.filter((dt) => dt != undefined)
+      AsyncStorage.setItem(DECK_STORAGE_KEY, JSON.stringify(updatedData))
     })
 }
 

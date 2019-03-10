@@ -6,15 +6,26 @@ import {
   TouchableOpacity
 } from 'react-native';
 import { connect } from 'react-redux';
+import { removeDeck, addDeck } from '../utils/api';
+import { deleteDeck } from '../actions';
 
 class DetailScreen extends React.Component {
+  deleteDeck(deckId) {
+    const { remove, goBack } = this.props;
+
+    remove();
+    goBack();
+    removeDeck(deckId)
+
+  }
+
   render() {
+    const { deck } = this.props;
+
     return (
       <View style={styles.container}>
-        <Text> DeckName </Text>
-        <Text> CardTotal </Text>
-
-
+        <Text> {deck.name} </Text>
+        <Text> {deck.cards.length} cards </Text>
 
         <TouchableOpacity style={styles.btn} onPress={() => true}>
           <Text> Add Card </Text>
@@ -22,6 +33,10 @@ class DetailScreen extends React.Component {
 
         <TouchableOpacity style={styles.btn} onPress={() => true}>
           <Text> Start Quiz </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.deleteBtn} onPress={() => this.deleteDeck(deck.id)}>
+          <Text> Delete Deck </Text>
         </TouchableOpacity>
 
       </View>
@@ -35,6 +50,7 @@ const styles = StyleSheet.create({
     paddingTop: 15,
     margin: 25,
     backgroundColor: '#fff',
+    alignItems: 'center'
   },
   btn: {
     height: 50,
@@ -48,6 +64,11 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     borderWidth: 1,
     marginBottom: 15
+  },
+  deleteBtn: {
+    color: 'crimson',
+    borderColor: 'crimson',
+    borderWidth: 1
   }
 });
 
@@ -56,8 +77,17 @@ function mapStateToProps(state, { navigation }) {
 
   return {
     deckId,
-    deck: state.find((dk) => dk.id === deckId)
+    deck: Object.values(state).find((dk) => dk.id = deckId)
   }
 }
 
-export default connect(mapStateToProps)(DetailScreen)
+function mapDispatchToProps(dispatch, { navigation }) {
+  const { deckId, deckName } = navigation.state.params;
+
+  return {
+    remove: () => dispatch(deleteDeck(deckName)),
+    goBack: () => navigation.goBack()
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DetailScreen)
