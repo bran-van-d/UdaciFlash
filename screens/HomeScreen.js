@@ -1,28 +1,37 @@
 import React from 'react';
-import { AsyncStorage } from 'react-native'
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { DECK_STORAGE_KEY } from '../utils/_deck';
+import { setDummyData } from '../utils/_deck';
+import { receiveDecks } from '../actions';
+import { connect } from 'react-redux';
+import { AppLoading } from 'expo'
 
-export default class HomeScreen extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      decks: []
-    }
+class HomeScreen extends React.Component {
+  state = {
+    ready: false
   }
 
   componentDidMount() {
-    AsyncStorage.getItem(DECK_STORAGE_KEY)
-      .then((results) => {
-        this.setState({ decks: JSON.parse(results)})
+    const { dispatch } = this.props;
+
+    setDummyData()
+      .then((decks) => dispatch(receiveDecks(decks)))
+      .then(() => {
+        this.setState(() => ({ready: true}))
       })
   }
 
   render() {
+    const { decks } = this.props;
+    const { ready } = this.state;
+
+    if (ready === false) {
+      return <AppLoading />
+    }
+
     return (
       <View style={styles.container}>
         <View style={styles.column}>
-          {this.state.decks.length > 0 && this.state.decks.map((deck) => {
+          {Object.values(decks).map((deck) => {
             const { id, name, cards } = deck;
 
             return (
@@ -67,3 +76,11 @@ const styles = StyleSheet.create({
     margin: 5
   }
 });
+
+function mapStateToProps(decks) {
+  return {
+    decks
+  }
+}
+
+export default connect(mapStateToProps)(HomeScreen)

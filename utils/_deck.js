@@ -1,7 +1,7 @@
 import { AsyncStorage } from 'react-native'
 export const DECK_STORAGE_KEY = 'UdaciFlash:deck'
 
-export function setDummyData() {
+export async function setDummyData() {
   const dummyData = [
     {
       id: 1,

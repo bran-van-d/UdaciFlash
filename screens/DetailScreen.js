@@ -5,13 +5,10 @@ import {
   Text,
   TouchableOpacity
 } from 'react-native';
+import { connect } from 'react-redux';
 
-export default class DetailScreen extends React.Component {
+class DetailScreen extends React.Component {
   render() {
-    const { deckId } = this.props.navigation.state.params
-
-    debugger;
-
     return (
       <View style={styles.container}>
         <Text> DeckName </Text>
@@ -53,3 +50,14 @@ const styles = StyleSheet.create({
     marginBottom: 15
   }
 });
+
+function mapStateToProps(state, { navigation }) {
+  const { deckId } = navigation.state.params;
+
+  return {
+    deckId,
+    deck: state.find((dk) => dk.id === deckId)
+  }
+}
+
+export default connect(mapStateToProps)(DetailScreen)
