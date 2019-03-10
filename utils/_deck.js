@@ -9,13 +9,35 @@ export function setDummyData() {
   const dummyData = [
     {
       id: getRandomNumber(555),
-      name: 'TEST DECK 1',
-      cards: []
+      name: 'Addition Deck',
+      cards: [
+        {
+          id: 1,
+          question: '2 + 2 ',
+          answer: '4'
+        },
+        {
+          id: 2,
+          question: '2 + 10 ',
+          answer: '12'
+        }
+      ]
     },
     {
       id: getRandomNumber(999),
-      name: 'TEST DECK 2',
-      cards: []
+      name: 'Multiplication Deck',
+      cards: [
+        {
+          id: 1,
+          question: '11 x 3 ',
+          answer: '33'
+        },
+        {
+          id: 2,
+          question: '7 x 3 ',
+          answer: '21'
+        }
+      ]
     },
   ]
 
