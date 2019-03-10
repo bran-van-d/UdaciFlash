@@ -5,10 +5,13 @@ import {
   Text,
   TouchableOpacity
 } from 'react-native';
-import { black } from 'ansi-colors';
 
 export default class DetailScreen extends React.Component {
   render() {
+    const { deckId } = this.props.navigation.state.params
+
+    debugger;
+
     return (
       <View style={styles.container}>
         <Text> DeckName </Text>

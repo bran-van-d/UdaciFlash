@@ -31,7 +31,7 @@ export default class HomeScreen extends React.Component {
                   style={styles.container}
                   onPress={() => this.props.navigation.navigate(
                     'DeckDetail',
-                    { deckId: 1 }
+                    { deckId: deck.id }
                   )}
                 >
                   <Text> {name} </Text>

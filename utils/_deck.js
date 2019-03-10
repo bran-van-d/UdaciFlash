@@ -1,14 +1,10 @@
 import { AsyncStorage } from 'react-native'
 export const DECK_STORAGE_KEY = 'UdaciFlash:deck'
 
-function getRandomNumber(max) {
-  return Math.floor(Math.random() * max) + 0
-}
-
 export function setDummyData() {
   const dummyData = [
     {
-      id: getRandomNumber(555),
+      id: 1,
       name: 'Addition Deck',
       cards: [
         {
@@ -24,7 +20,7 @@ export function setDummyData() {
       ]
     },
     {
-      id: getRandomNumber(999),
+      id: 2,
       name: 'Multiplication Deck',
       cards: [
         {
