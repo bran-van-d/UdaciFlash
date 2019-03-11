@@ -6,6 +6,10 @@ import {
   TextInput,
   TouchableOpacity 
 } from 'react-native';
+import { connect } from 'react-redux';
+import { addDeck } from '../actions';
+import { addDeckToStorage } from '../utils/api';
+import { NavigationActions } from 'react-navigation'
 
 function SubmitBtn({ onPress }) {
   return (
@@ -16,17 +20,32 @@ function SubmitBtn({ onPress }) {
     </TouchableOpacity>
   )
 }
-
-submit = () => {
-  return true;
-}
-
-export default class AddScreen extends React.Component {
+class AddScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      text: 'Deck Title'
+      text: ''
     }
+  }
+
+  submit = () => {
+    const { decks } = this.props;
+
+    const key = decks.length + 1;
+    const entry = {
+      id: key,
+      name: this.state.text,
+      cards: []
+    }
+
+    this.props.dispatch(addDeck({
+      [key]: entry
+    }))
+
+    this.setState({ text: ''})
+
+    this.props.navigation.goBack(null);
+    // addDeckToStorage({ key, entry });
   }
 
   render() {
@@ -36,6 +55,7 @@ export default class AddScreen extends React.Component {
         <TextInput
           style={{height: 40, borderColor: 'red', borderWidth: 1}}
           onChangeText={(text) => this.setState({text})}
+          placeholder='Deck Title'
           value={this.state.text}
         /> 
         
@@ -75,3 +95,11 @@ const styles = StyleSheet.create({
     marginRight: 30,
   },
 });
+
+function mapStateToProps(decks) {
+  return {
+    decks: Object.values(decks)
+  }
+}
+
+export default connect(mapStateToProps)(AddScreen)

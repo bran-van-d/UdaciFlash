@@ -8,6 +8,7 @@ import {
 import { connect } from 'react-redux';
 import { removeDeck, addDeck } from '../utils/api';
 import { deleteDeck } from '../actions';
+import { AppLoading } from 'expo'
 
 class DetailScreen extends React.Component {
   deleteDeck(deckId) {
@@ -16,11 +17,14 @@ class DetailScreen extends React.Component {
     remove();
     goBack();
     removeDeck(deckId)
-
   }
 
   render() {
     const { deck } = this.props;
+
+    if (deck === undefined) {
+      return <AppLoading />
+    }
 
     return (
       <View style={styles.container}>
@@ -77,12 +81,12 @@ function mapStateToProps(state, { navigation }) {
 
   return {
     deckId,
-    deck: Object.values(state).find((dk) => dk.id = deckId)
+    deck: Object.values(state).find((dk) => dk.id === deckId)
   }
 }
 
 function mapDispatchToProps(dispatch, { navigation }) {
-  const { deckId, deckName } = navigation.state.params;
+  const { deckName } = navigation.state.params;
 
   return {
     remove: () => dispatch(deleteDeck(deckName)),

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { setDummyData } from '../utils/_deck';
 import { receiveDecks } from '../actions';
 import { connect } from 'react-redux';
@@ -31,7 +31,7 @@ class HomeScreen extends React.Component {
     console.log(decks);
 
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <View style={styles.column}>
           {decks.length > 0 && decks.map((deck) => {
             const { id, name, cards } = deck;
@@ -53,7 +53,7 @@ class HomeScreen extends React.Component {
           })}
 
         </View>
-      </View>
+      </ScrollView>
     );
   }
 }
@@ -61,9 +61,9 @@ class HomeScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: 'column',
     paddingTop: 20,
     backgroundColor: '#fff',
-    alignItems: 'center'
   },
   column: {
     flex: 1,

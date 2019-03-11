@@ -1,7 +1,7 @@
 import { AsyncStorage } from 'react-native'
 import { DECK_STORAGE_KEY } from './_deck'
 
-export function addDeck({ entry, key }) {
+export function addDeckToStorage({ entry, key }) {
   return AsyncStorage.mergeItem(DECK_STORAGE_KEY, JSON.stringify({
     [key]: entry
   }))
