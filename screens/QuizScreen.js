@@ -17,7 +17,6 @@ class QuizScreen extends React.Component {
       questionsCorrect: 0,
       questionsIncorrect: 0,
       seeAnswer: false,
-      quizComplete: false
     }
   }
 
@@ -34,25 +33,34 @@ class QuizScreen extends React.Component {
     }))
   }
 
+  restartQuiz = () => {
+    const cardTotal = this.props.cardList.length;
+
+
+    this.setState(() => ({
+      questionsRemaining: cardTotal,
+      questionTotal: cardTotal,
+      questionsCorrect: 0,
+      questionsIncorrect: 0,
+      seeAnswer: false,
+    }))
+  }
+
   componentDidMount() {
     const cardTotal = this.props.cardList.length;
 
     this.setState(() => ({ 
       questionsRemaining: cardTotal,
       questionTotal: cardTotal
-      }))
+    }))
   }
 
   render() {
     const { cardList } = this.props;
-    const { seeAnswer, questionsRemaining, quizComplete, questionsCorrect, questionsIncorrect } = this.state;
+    const { seeAnswer, questionsRemaining, questionsCorrect, questionsIncorrect } = this.state;
 
     if (questionsRemaining === 'loading') {
       return <AppLoading />
-    }
-
-    if(questionsRemaining === 0 && quizComplete !== true) {
-      this.setState({quizComplete: true})
     }
 
     const cardToShow = cardList.find((card) => card.id === questionsRemaining);
@@ -63,11 +71,19 @@ class QuizScreen extends React.Component {
         {cardList.length === 0
           ? <Text> You have no cards. Please add some before taking the quiz! </Text>
           : <View style={styles.container}>
-              {quizComplete || cardToShow === undefined
+            {questionsRemaining === 0 || cardToShow === undefined
                 ? <View> 
                     <Text> Quiz Complete </Text>
                     <Text> Correct: {questionsCorrect} </Text>
                     <Text> Incorrect: {questionsIncorrect} </Text>
+
+                    <TouchableOpacity style={styles.btn} onPress={() => this.restartQuiz()}>
+                      <Text> Restart Quiz </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.btn} onPress={() => true}>
+                      <Text> Back To Deck View </Text>
+                    </TouchableOpacity>
                   </View>
                 : <View >
                     {seeAnswer
