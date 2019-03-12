@@ -13,11 +13,12 @@ class QuizScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      questionsRemaing: '',
-      questionTotal: '',
-      questionsCorrect: '',
-      questionsIncorrect: '',
+      questionsRemaining: 1000,
+      questionTotal: 0,
+      questionsCorrect: 0,
+      questionsIncorrect: 0,
       seeAnswer: false,
+      quizComplete: false
     }
   }
 
@@ -25,43 +26,79 @@ class QuizScreen extends React.Component {
     this.setState({ seeAnswer: true })
   }
 
+  selectAnswer = (choice) => {
+    this.setState(() => ({
+      questionsRemaining: this.state.questionsRemaining - 1 === 0 ? 0 : this.state.questionsRemaining - 1,
+      questionsCorrect: choice === 'correct' ? this.state.questionsCorrect + 1 : this.state.questionsCorrect,
+      questionsIncorrect: choice === 'incorrect' ? this.state.questionsIncorrect + 1 : this.state.questionsIncorrect,
+      seeAnswer: false
+    }))
+  }
+
+  componentDidMount() {
+    this.setState({ questionsRemaining: this.props.cardList.length})
+  }
+
   render() {
     const { cardList } = this.props;
-    const { seeAnswer } = this.state;
+    const { seeAnswer, questionsRemaining, quizComplete, questionsCorrect, questionsIncorrect } = this.state;
 
     if (cardList === undefined) {
       return <AppLoading />
     }
 
-    const cardToShow = cardList.find((card) => card.id = cardList.length);
+    if(questionsRemaining === 0 && quizComplete !== true) {
+      this.setState({quizComplete: true})
+    }
 
-    console.log(cardToShow);
+    const cardToShow = cardList.find((card) => card.id = cardList.length);
 
     return (
       <View style={styles.container}>
+        <Text> Questions Remaining: {questionsRemaining} </Text>
         {cardList.length === 0
           ? <Text> You have no cards. Please add some before taking the quiz! </Text>
-          : 
-            <View style={styles.questionAnswer}>
-                {seeAnswer
-                  ? <Text style={{ fontSize: 40 }}> {cardToShow.answer} </Text>
-                  : <Text style={{ fontSize: 40 }}> {cardToShow.question} </Text> 
-                }
+          : <View style={styles.container}>
+              {quizComplete 
+                ? <View> 
+                    <Text> Quiz Complete </Text>
+                    <Text> Correct: {questionsCorrect} </Text>
+                    <Text> Incorrect: {questionsIncorrect} </Text>
+                  </View>
+                : <View >
+                    {seeAnswer
+                      ? 
+                        <View>
+                          <View style={styles.questionAnswer}> 
+                            <Text style={{ fontSize: 40 }}> {cardToShow.answer} </Text>
+                          </View>  
+                          <View> 
+                            <TouchableOpacity style={styles.btn} onPress={() => this.selectAnswer('correct')}>
+                              <Text> Correct </Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity style={styles.btn} onPress={() => this.selectAnswer('incorrect')}>
+                              <Text> Incorrect </Text>
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                      : 
+                        <View style={styles.container}> 
+                          <View style={styles.questionAnswer}>
+                              <Text style={{ fontSize: 40 }}> {cardToShow.question} </Text>
+                            </View> 
+                            <View>
+                              <TouchableOpacity style={styles.btn} onPress={this.flipCard}>
+                                <Text> Show Answer </Text>
+                              </TouchableOpacity>
+                            </View>
+                        </View>
+
+                    }
+                  </View>
+              }
             </View>
-        }
-
-        <TouchableOpacity style={styles.btn} onPress={this.flipCard}>
-          <Text> Show Answer </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.btn} onPress={() => true}>
-          <Text> Correct </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.btn} onPress={() => true}>
-          <Text> Incorrect </Text>
-        </TouchableOpacity>
-
+          }
       </View>
     );
   }
