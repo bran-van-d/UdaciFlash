@@ -38,7 +38,10 @@ class DetailScreen extends React.Component {
           <Text> Add Card </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.btn} onPress={() => true}>
+        <TouchableOpacity style={styles.btn} onPress={() => this.props.navigation.navigate(
+          'QuizScreen',
+          { deck }
+        )}>
           <Text> Start Quiz </Text>
         </TouchableOpacity>
 
