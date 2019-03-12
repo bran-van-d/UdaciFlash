@@ -36,7 +36,6 @@ class QuizScreen extends React.Component {
   restartQuiz = () => {
     const cardTotal = this.props.cardList.length;
 
-
     this.setState(() => ({
       questionsRemaining: cardTotal,
       questionTotal: cardTotal,
@@ -81,7 +80,9 @@ class QuizScreen extends React.Component {
                       <Text> Restart Quiz </Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.btn} onPress={() => true}>
+                    <TouchableOpacity style={styles.btn} onPress={() => this.props.navigation.navigate(
+                      'Home'
+                    )}>
                       <Text> Back To Deck View </Text>
                     </TouchableOpacity>
                   </View>
