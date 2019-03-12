@@ -6,14 +6,13 @@ import {
   TouchableOpacity
 } from 'react-native';
 import { connect } from 'react-redux';
-import { deleteDeck } from '../actions';
 import { AppLoading } from 'expo'
 
 class QuizScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      questionsRemaining: 1000,
+      questionsRemaining: 'loading',
       questionTotal: 0,
       questionsCorrect: 0,
       questionsIncorrect: 0,
@@ -36,14 +35,19 @@ class QuizScreen extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({ questionsRemaining: this.props.cardList.length})
+    const cardTotal = this.props.cardList.length;
+
+    this.setState(() => ({ 
+      questionsRemaining: cardTotal,
+      questionTotal: cardTotal
+      }))
   }
 
   render() {
     const { cardList } = this.props;
     const { seeAnswer, questionsRemaining, quizComplete, questionsCorrect, questionsIncorrect } = this.state;
 
-    if (cardList === undefined) {
+    if (questionsRemaining === 'loading') {
       return <AppLoading />
     }
 
@@ -51,7 +55,7 @@ class QuizScreen extends React.Component {
       this.setState({quizComplete: true})
     }
 
-    const cardToShow = cardList.find((card) => card.id = cardList.length);
+    const cardToShow = cardList.find((card) => card.id === questionsRemaining);
 
     return (
       <View style={styles.container}>
@@ -59,7 +63,7 @@ class QuizScreen extends React.Component {
         {cardList.length === 0
           ? <Text> You have no cards. Please add some before taking the quiz! </Text>
           : <View style={styles.container}>
-              {quizComplete 
+              {quizComplete || cardToShow === undefined
                 ? <View> 
                     <Text> Quiz Complete </Text>
                     <Text> Correct: {questionsCorrect} </Text>
