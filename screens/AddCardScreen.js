@@ -1,13 +1,13 @@
 import React from 'react';
-import { 
-  View, 
+import {
+  View,
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity 
+  TouchableOpacity
 } from 'react-native';
 import { connect } from 'react-redux';
-import { addDeck } from '../actions';
+import { addCardToDeck } from '../actions';
 
 function SubmitBtn({ onPress }) {
   return (
@@ -18,29 +18,30 @@ function SubmitBtn({ onPress }) {
     </TouchableOpacity>
   )
 }
-class AddScreen extends React.Component {
+class AddCardScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      text: ''
+      questionText: '',
+      answerText: ''
+
     }
   }
 
   submit = () => {
-    const { decks } = this.props;
+    const { deck } = this.props.navigation.state.params;
+    const { questionText, answerText } = this.state;
+    const deckObjectIndex = deck.id - 1;
 
-    const key = decks.length + 1;
     const entry = {
-      id: key,
-      name: this.state.text,
-      cards: []
+      id: deck.cards.length + 1,
+      question: questionText,
+      answer: answerText
     }
 
-    this.props.dispatch(addDeck({
-      [key - 1]: entry
-    }))
+    this.props.dispatch(addCardToDeck(deckObjectIndex, entry));
 
-    this.setState({ text: ''})
+    this.setState({ questionText: '', answerText: '' })
 
     this.props.navigation.goBack(null);
   }
@@ -48,14 +49,20 @@ class AddScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-      <Text> What is the title of the new deck ?</Text>
         <TextInput
-          style={{height: 40, borderColor: 'red', borderWidth: 1}}
-          onChangeText={(text) => this.setState({text})}
-          placeholder='Deck Title'
-          value={this.state.text}
-        /> 
-        
+          style={{ height: 40, borderColor: 'red', borderWidth: 1 }}
+          onChangeText={(questionText) => this.setState({ questionText })}
+          placeholder='Question'
+          value={this.state.questionText}
+        />
+
+        <TextInput
+          style={{ height: 40, borderColor: 'red', borderWidth: 1 }}
+          onChangeText={(answerText) => this.setState({ answerText })}
+          placeholder='Answer'
+          value={this.state.answerText}
+        />
+
         <SubmitBtn onPress={this.submit} />
       </View>
     );
@@ -93,10 +100,11 @@ const styles = StyleSheet.create({
   },
 });
 
-function mapStateToProps(decks) {
+function mapStateToProps(decks, { navigation }) {
   return {
-    decks: Object.values(decks)
+    decks: Object.values(decks),
+    deck: navigation.state.deck
   }
 }
 
-export default connect(mapStateToProps)(AddScreen)
+export default connect(mapStateToProps)(AddCardScreen)

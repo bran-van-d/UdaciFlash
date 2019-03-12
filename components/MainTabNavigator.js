@@ -6,10 +6,12 @@ import TabBarIcon from './TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import AddScreen from '../screens/AddScreen';
 import DetailScreen from '../screens/DetailScreen';
+import AddCardScreen from '../screens/AddCardScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
-  DeckDetail: DetailScreen
+  DeckDetail: DetailScreen,
+  AddCard: AddCardScreen
 });
 
 HomeStack.navigationOptions = {
