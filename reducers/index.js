@@ -20,8 +20,6 @@ function decks(state = [], action) {
     case ADD_CARD: {
       const { deckId, cardInfo } = action;
 
-      debugger;
-
       return {
         ...state,
         [deckId]: {
