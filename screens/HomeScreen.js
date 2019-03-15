@@ -1,13 +1,17 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView, Animated, Easing } from 'react-native';
 import { setDummyData } from '../utils/_deck';
 import { receiveDecks } from '../actions';
 import { connect } from 'react-redux';
 import { AppLoading } from 'expo'
 
 class HomeScreen extends React.Component {
-  state = {
-    ready: false
+  constructor(props) {
+    super(props)
+    this.state = {
+      ready: false
+    }
+    this.rotateValue = new Animated.Value(0); 
   }
 
   componentDidMount() {
@@ -28,7 +32,12 @@ class HomeScreen extends React.Component {
       return <AppLoading />
     }
 
-    console.log(decks);
+    let rotateDeck = this.rotateValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: ["0deg", "360deg"]
+    })
+
+    let transformStyle = { ...styles.deck, transform: [{ rotate: rotateDeck }] };
 
     return (
       <ScrollView style={styles.container}>
@@ -37,18 +46,34 @@ class HomeScreen extends React.Component {
             const { id, name, cards } = deck;
 
             return (
-              <View key={id} style={styles.deck}>
+              <Animated.View 
+                key={id} 
+                style={transformStyle}
+              >
                 <TouchableOpacity
                   style={styles.container}
-                  onPress={() => this.props.navigation.navigate(
-                    'DeckDetail',
-                    { deckId: deck.id, deckName: deck.name }
-                  )}
+                  onPress={() => {
+                    Animated.timing(this.rotateValue, {
+                      toValue: 1,
+                      duration: 500,
+                      easing: Easing.linear
+                    }).start();
+
+                    setTimeout(() => {
+                      this.props.navigation.navigate(
+                        'DeckDetail',
+                        { deckId: deck.id, deckName: deck.name }
+                      )
+
+                      this.rotateValue.setValue(0);
+                    }, 500)
+
+                  }}
                 >
                   <Text> {name} </Text>
                   <Text> {cards.length} cards </Text>
                 </TouchableOpacity>
-              </View>
+              </Animated.View>
             )
           })}
 
@@ -86,3 +111,8 @@ function mapStateToProps(decks) {
 }
 
 export default connect(mapStateToProps)(HomeScreen)
+
+// onPress = {() => this.props.navigation.navigate(
+//   'DeckDetail',
+//   { deckId: deck.id, deckName: deck.name }
+// )}
