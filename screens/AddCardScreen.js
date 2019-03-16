@@ -43,7 +43,10 @@ class AddCardScreen extends React.Component {
 
     this.setState({ questionText: '', answerText: '' })
 
-    this.props.navigation.goBack(null);
+    this.props.navigation.navigate(
+      'DeckDetail',
+      {deckId: deck.id, deckName: deck.name}
+    );
   }
 
   render() {
